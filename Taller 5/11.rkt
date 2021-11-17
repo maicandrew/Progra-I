@@ -1,0 +1,21 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname |11|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+;Implementar una función que eleve un número x a la y (siendo y un entero positivo) sin usar la funcion expt.
+(define (potencia x y z)
+  (if (>= y 1)
+      (potencia x (- y 1) (* x z))
+      (display z)
+  )
+)
+;Llamado
+(potencia (begin
+            (display "Inserte numero: ")
+            (read)
+          )
+          (begin
+            (display "Inserte potencia: ")
+            (read)
+          )
+          1
+)

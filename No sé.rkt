@@ -1,0 +1,29 @@
+(define cad1 (string #\m #\u #\r #\c #\i #\e #\l #\a #\g #\o))
+(define cad2 (make-string (string-length cad1) #\-))
+
+
+(define (validarletra l vidas tam)
+    (if (and (>= vidas 1) (>= tam 0))
+      (if (char=? (string-ref cad1 tam) l)
+          (begin
+             (string-set! cad2 tam l)
+             (validarletra l vidas (- tam 1))
+           )
+           (validarletra l vidas (- tam 1))
+      )
+      (begin
+        (display cad2)
+        (newline)
+        (if (>= vidas 1)
+          (begin
+            (display "Vidas restantes: ") (display (- vidas 1))
+            (newline)
+            (validarletra (read-char) vidas (- (string-length cad1) 1))
+          )
+          (display "Perdió")
+        )
+      )
+  )
+)
+
+(validarletra (read-char) 5 (- (string-length cad1) 1))

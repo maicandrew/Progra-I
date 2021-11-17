@@ -1,0 +1,387 @@
+(require (lib "graphics.ss" "graphics"))
+(open-graphics)
+
+
+(define inicio (open-viewport "Maxell" 466 642))
+((draw-pixmap inicio) "tal vez.png" (make-posn 0 0))
+
+;Teclado
+(define (nave posx posy lad ventana img)
+ (if(equal? lad 'u)
+     ((draw-pixmap ventana) img (make-posn posx posy))
+     (if (equal? lad 'd)
+         ((draw-pixmap ventana) img (make-posn posx posy))
+
+  (if (equal? lad 'l)
+    
+    ((draw-pixmap ventana) img (make-posn posx posy))
+
+    (if(equal? lad 'r)
+    ((draw-pixmap ventana) img (make-posn posx posy))
+
+;else}
+   (void)
+    
+     )
+   )
+  )
+ )
+)
+(define (movdp posx1 posy1 t ventana lvl)
+  (if (< posx1 (* 13 35))
+      (begin
+        ((draw-pixmap ventana) (cond ((= lvl 1) "Padre.png") ((= lvl 2) "Padre2.png") (else "Black.png")) (make-posn (/ posx1 35) (/ posy1 35)))
+        (vector-set! (vector-ref matriz (/ posy1 35)) (/ posx1 35) 4)
+        (sleep t)
+        (movdp (+ posx1 35) posy1 t ventana lvl)
+      )
+      (movip posx1 posy1 t ventana lvl)
+  )
+)
+(define (movdp posx1 posy1 t ventana lvl)
+  (if (> posx1 35)
+      (begin
+        ((draw-pixmap ventana) (cond ((= lvl 1) "Padre.png") ((= lvl 2) "Padre2.png") (else "Black.png")) (make-posn (/ posx1 35) (/ posy1 35)))
+        (vector-set! (vector-ref matriz (/ posy1 35)) (/ posx1 35) 4)
+        (sleep t)
+        (movdp (- posx1 35) posy1 t ventana lvl)
+      )
+      (movdp posx1 posy1 t ventana lvl)
+  )
+)
+  
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIÓN PRINCIPAL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (teclado posx posy press ventana img ll lvl)
+  (if (< lvl 3)
+  (if (< ll (cond ((= lvl 1) 3) ((= lvl 2) 5) (else 1)))
+  
+  (if (equal? press 'up)
+      (if (= (vector-ref (vector-ref matriz (/ (- posy 35) 35)) (/ posx 35)) 1)
+          ()
+          (if (= (vector-ref (vector-ref matriz (/ (- posy 35) 35)) (/ posx 35)) 5)
+              (begin
+                (vector-set! (vector-ref matriz (/ (- posy 35) 35)) (/ posx 35) 9)
+                (limpiar posx posy ventana lvl)
+                (nave posx (- posy 35) 'u ventana img)
+              )
+              (begin
+                (vector-set! (vector-ref matriz (/ (- posy 35) 35)) (/ posx 35) 9)
+                (limpiar posx posy ventana lvl)
+                (nave posx (- posy 35) 'u ventana img)
+              )))
+      
+      (if (equal? press 'down)
+          (if (= (vector-ref (vector-ref matriz (/ (+ posy 35) 35)) (/ posx 35)) 1)
+              ()
+          (if (= (vector-ref (vector-ref matriz (/ (+ posy 35) 35)) (/ posx 35)) 5)
+              (begin
+                (vector-set! (vector-ref matriz (/ (+ posy 35) 35)) (/ posx 35) 9)
+                (limpiar posx posy ventana lvl)
+                (nave posx (+ posy 35) 'd ventana img)
+              )
+              (begin
+                (vector-set! (vector-ref matriz (/ (+ posy 35) 35)) (/ posx 35) 9)
+                (limpiar posx posy ventana lvl)
+                (nave posx (+ posy 35) 'd ventana img)
+              )))
+          
+          (if (equal? press 'left)
+              (if (= (vector-ref (vector-ref matriz (/ posy 35)) (/ (- posx 35) 35)) 1)
+                  ()
+                  (if (= (vector-ref (vector-ref matriz (/ posy 35)) (/ (- posx 35) 35)) 5)
+                      (begin
+                        (vector-set! (vector-ref matriz (/ posy 35)) (/ (- posx 35) 35) 9)
+                        (limpiar posx posy ventana lvl)
+                        (nave (- posx 35) posy 'l ventana img)
+                      )
+                      (begin
+                        (vector-set! (vector-ref matriz (/ posy 35)) (/ (- posx 35) 35) 9)
+                        (limpiar posx posy ventana lvl)
+                        (nave (- posx 35) posy 'l ventana img)
+                      )))
+          
+              
+              (if (equal? press 'right)
+                  (if (= (vector-ref (vector-ref matriz (/ posy 35)) (/ (+ posx 35) 35)) 1)
+                      ()
+                      (if (= (vector-ref (vector-ref matriz (/ posy 35)) (/ (+ posx 35) 35)) 5)
+                            (begin
+                              (vector-set! (vector-ref matriz (/ posy 35)) (/ (+ posx 35) 35) 9)
+                              (limpiar posx posy ventana lvl)
+                              (nave (+ posx 35) posy 'r ventana img)
+                              )
+                            (if (= (vector-ref (vector-ref matriz (/ posy 35)) (/ (+ posx 35) 35)) 7)
+                                (new-lvl ventana posx posy lvl)
+                                (begin
+                                  (vector-set! (vector-ref matriz (/ posy 35)) (/ (+ posx 35) 35) 9)
+                                  (limpiar posx posy ventana lvl)
+                                  (nave (+ posx 35) posy 'r ventana img)
+                                ))))
+                  
+                  (if (equal? press #\x)
+                      (close-viewport ventana)
+                      
+                      ;else
+                      ())
+                  
+                  )
+              )
+          )
+      )
+      (begin
+        (vector-set! linea9 14 7)
+        ((draw-pixmap ventana) "Puerta1.png" (make-posn (* 35 14) (* 35 9)))
+        (teclado posx posy (key-value (get-key-press ventana)) ventana img 0 lvl)
+      )
+    )
+    ((draw-string ventana) (make-posn 245 192) "GANÓ" "white")
+  )
+)
+
+;;;;;;;;;;;;;;;;;; DIBUJAR NUEVO NIVEL ;;;;;;;;;;;;;;;;;;
+
+(define (new-lvl ventana posx posy lvl)
+  (begin
+    (vector-set! (vector-ref matriz (/ posy 35)) (/ posx 35) 0)
+    (vector-set! linea9 14 7)
+    (vector-set! linea1 1 9)
+    (vector-set! linea4 13 5)
+    (vector-set! linea5 7 5)
+    (vector-set! linea9 4 5)
+    (vector-set! linea7 12 5)
+    (vector-set! linea9 14 1)
+    (vector-set! linea3 6 5)
+    (dibujar 0 0 ventana (+ lvl 1))
+  ))
+
+
+
+
+;Función que limpia movivmiento
+
+(define (limpiar posx posy ventana lvl)
+  (begin
+  ((draw-pixmap ventana) (cond ((= lvl 1) "Grass.png") ((= lvl 2) "lava.png")) (make-posn posx posy))
+  (vector-set! (vector-ref matriz (/ posy 35)) (/ posx 35) 0)
+))
+
+;Puntaje
+
+(define (score jg ventana)
+  (if (>= t 0)
+      (begin
+        ((draw-string ventana) (make-posn 400 20) (number->string pt))
+        (sleep 1)
+        ((draw-solid-rectangle ventana) (make-posn 400 5) 25 20 "white")
+        (score (- pt 20) (- t 1) ventana)
+      )
+      (begin
+        ((draw-pixmap ventana) "Vikingo.png" (make-posn 0 0))
+        (if (get-mouse-click ventana)
+        (close-viewport ventana))
+      )
+  )
+)
+
+;Matriz
+
+(define linea0 (make-vector 15 1))
+(define linea1 (make-vector 15))
+(define linea2 (make-vector 15))
+(define linea3 (make-vector 15))
+(define linea4 (make-vector 15))
+(define linea5 (make-vector 15))
+(define linea6 (make-vector 15))
+(define linea7 (make-vector 15))
+(define linea8 (make-vector 15))
+(define linea9 (make-vector 15))
+(define linea10 (make-vector 15 1))
+
+(vector-set! linea1 0 1)
+(vector-set! linea1 1 9)
+(vector-set! linea1 14 1)
+
+(vector-set! linea2 0 1)
+(vector-set! linea2 2 1)
+(vector-set! linea2 4 1)
+(vector-set! linea2 6 1)
+(vector-set! linea2 8 1)
+(vector-set! linea2 10 1)
+(vector-set! linea2 12 1)
+(vector-set! linea2 14 1)
+
+(vector-set! linea3 0 1)
+(vector-set! linea3 14 1)
+
+(vector-set! linea4 0 1)
+(vector-set! linea4 2 1)
+(vector-set! linea4 4 1)
+(vector-set! linea4 6 1)
+(vector-set! linea4 8 1)
+(vector-set! linea4 10 1)
+(vector-set! linea4 12 1)
+(vector-set! linea4 13 5)
+(vector-set! linea4 14 1)
+
+(vector-set! linea5 0 1)
+(vector-set! linea5 7 5)
+(vector-set! linea5 14 1)
+
+(vector-set! linea6 0 1)
+(vector-set! linea6 2 1)
+(vector-set! linea6 4 1)
+(vector-set! linea6 6 1)
+(vector-set! linea6 8 1)
+(vector-set! linea6 10 1)
+(vector-set! linea6 12 1)
+(vector-set! linea6 14 1)
+
+(vector-set! linea7 0 1)
+(vector-set! linea7 14 1)
+
+(vector-set! linea8 0 1)
+(vector-set! linea8 2 1)
+(vector-set! linea8 4 1)
+(vector-set! linea8 6 1)
+(vector-set! linea8 8 1)
+(vector-set! linea8 10 1)
+(vector-set! linea8 12 1)
+(vector-set! linea8 14 1)
+
+(vector-set! linea9 0 1)
+(vector-set! linea9 4 5)
+(vector-set! linea9 14 1)
+
+(define matriz (vector
+linea0
+linea1
+linea2
+linea3
+linea4
+linea5
+linea6
+linea7
+linea8
+linea9
+linea10))
+
+
+(define (dibujar pos vec ventana lvl)
+  (if (<= vec 10)
+      (if (<= pos 14)
+          (if (= (vector-ref (vector-ref matriz vec) pos) 0)
+              (begin
+                ((draw-pixmap ventana) (cond ((= lvl 1) "Grass.png") ((= lvl 2) "lava.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                (dibujar (+ pos 1) vec ventana lvl)
+              )
+              (if (= (vector-ref (vector-ref matriz vec) pos) 1)
+              (begin
+                ((draw-pixmap ventana) (cond ((= lvl 1) "Brick.png") ((= lvl 2) "Brick.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                (dibujar (+ pos 1) vec ventana lvl)
+              )
+              (if (= (vector-ref (vector-ref matriz vec) pos) 2)
+              (begin
+                ((draw-pixmap ventana) (cond ((= lvl 1) "Vikingo.png") ((= lvl 2) "Vikingo2.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                (dibujar (+ pos 1) vec ventana lvl)
+              )
+              (if (= (vector-ref (vector-ref matriz vec) pos) 3)
+              (begin
+                ((draw-pixmap ventana) (cond ((= lvl 1) "Sparta.png") ((= lvl 2) "Sparta2.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                (dibujar (+ pos 1) vec ventana lvl)
+              )
+              (if (= (vector-ref (vector-ref matriz vec) pos) 4)
+              (begin
+                ((draw-pixmap ventana) (cond ((= lvl 1) "Padre.png") ((= lvl 2) "Padre2.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                (dibujar (+ pos 1) vec ventana lvl)
+              )
+              (if (= (vector-ref (vector-ref matriz vec) pos) 5)
+              (begin
+                ((draw-pixmap ventana) (cond ((= lvl 1) "Llaves.png") ((= lvl 2) "Llaves2.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                (dibujar (+ pos 1) vec ventana lvl)
+              )
+              (if (= (vector-ref (vector-ref matriz vec) pos) 9)
+                  (begin
+                    ((draw-pixmap ventana) (cond ((= lvl 1) "Maxell.png") ((= lvl 2) "Maxell2.png") (else "Black.png")) (make-posn (* pos 35) (* vec 35)))
+                    (dibujar (+ pos 1) vec ventana lvl)
+                  )
+              )))))))
+            (dibujar 0 (+ vec 1) ventana lvl)
+      )
+      (teclado 35 35 10 ventana (cond ((= lvl 1) "Maxell.png") ((= lvl 2) "Maxell2.png") (else "Black.png")) 0 lvl)
+    )
+)
+
+(define (movdp posx1 posy1 posx posy t ventana lvl ll)
+  (if (< posx1 (* 13 35))
+      (begin
+        ((draw-pixmap ventana) (cond ((= lvl 1) "Padre.png") ((= lvl 2) "Padre2.png") (else "Black.png")) (make-posn posx1 posy1))
+        (vector-set! (vector-ref matriz (/ posy1 35)) (/ posx1 35) 4)
+        (sleep t)
+        (teclado posx posy (key-value (ready-key-press ventana)) img ll lvl)
+        (movdp (+ posx1 35) posy1 posx posy t ventana lvl ll)
+      )
+      (movip posx1 posy1 posx posy t ventana lvl ll)
+  )
+)
+(define (movip posx1 posy1 t ventana lvl ll)
+  (if (> posx1 35)
+      (begin
+        ((draw-pixmap ventana) (cond ((= lvl 1) "Padre.png") ((= lvl 2) "Padre2.png") (else "Black.png")) (make-posn posx1 posy1))
+        (vector-set! (vector-ref matriz (/ posy1 35)) (/ posx1 35) 4)
+        (sleep t)
+        (teclado posx posy (key-value (ready-key-press ventana)) img ll lvl)
+        (movip (- posx1 35) posy1 posx posy t ventana lvl ll)
+      )
+      (movdp posx1 posy1 posx posy t ventana lvl ll)
+  )
+)
+
+;Menú
+
+(define menu
+  (if (get-mouse-click inicio)
+      (if
+       (and
+        (>=(posn-x (query-mouse-posn inicio))140)
+        (<= (posn-x(query-mouse-posn inicio))315)
+        (>= (posn-y(query-mouse-posn inicio))250)            ;Inicia el juego
+        (<=(posn-y (query-mouse-posn inicio))315))
+       (begin
+         (close-viewport inicio)
+         (let ([jugar (open-viewport "Jugar" 525 385)])
+            (dibujar 0 0 jugar 1)
+         )
+       )
+       (if
+       (and
+        (>=(posn-x (query-mouse-posn inicio))145)
+        (<= (posn-x(query-mouse-posn inicio))310)
+        (>= (posn-y(query-mouse-posn inicio))330)            ;Muestra la ayuda
+        (<=(posn-y (query-mouse-posn inicio))390))
+       (begin
+         (close-viewport inicio)
+         (let ([ayuda (open-viewport "Ayuda" 700 700)])
+         ((draw-pixmap ayuda) "Vikingo.png" (make-posn 100 100)))
+       )
+       (if
+       (and
+        (>=(posn-x (query-mouse-posn inicio))105)
+        (<= (posn-x(query-mouse-posn inicio))350)
+        (>= (posn-y(query-mouse-posn inicio))400)            ;Créditos
+        (<=(posn-y (query-mouse-posn inicio))460))
+       (begin
+         (close-viewport inicio)
+         (let ([creditos (open-viewport "Creditos" 700 700)])
+         ((draw-pixmap creditos) "Padre.png" (make-posn 100 100)))
+       )
+       (if
+        (and
+         (>=(posn-x (query-mouse-posn inicio))158)
+         (<= (posn-x(query-mouse-posn inicio))297)
+         (>= (posn-y(query-mouse-posn inicio))466)            ;Salir
+         (<=(posn-y (query-mouse-posn inicio))528)
+        )
+        (close-viewport inicio)
+        ))))))

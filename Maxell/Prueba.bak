@@ -1,0 +1,15 @@
+(require (lib "graphics"))
+(open-graphics)
+(define juego(open-viewport "Baile" 700 415))
+((draw-pixmap juego)"imagen inicio.jpg"(make-posn 0 0))
+(if (get-mouse-click juego)
+(begin 
+(if
+ (and
+  (>=(posn-x (query-mouse-posn juego))528)
+  (<= (posn-x(query-mouse-posn juego))676)
+  (>= (posn-y(query-mouse-posn juego))282)            ;INICIO
+  (<=(posn-y (query-mouse-posn juego))340)
+  (play-sound "click2.wav" #t))
+  ((draw-pixmap juego)"guia.png"(make-posn 0 0))
+  )))

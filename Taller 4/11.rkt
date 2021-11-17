@@ -1,0 +1,58 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname |11|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+(define (costo carrera estrato)
+       (cond ((and (= carrera 1) (= estrato 1))
+               (begin
+                 (display "El valor de su matrícula es: $")
+                 (- 1200000 (* 1200000 0.20))
+               )
+             )
+             ((and (= carrera 1) (= estrato 2))
+               (begin
+                 (display "El valor de su matrícula es: $")
+                 (- 1200000 (* 1200000 0.10))
+               )
+             )
+             ((and (= carrera 2) (= estrato 1))
+               (begin
+                 (display "El valor de su matrícula es: $")
+                 (- 1000000 (* 1000000 0.20))
+               )
+             )
+             ((and (= carrera 2) (= estrato 2))
+               (begin
+                 (display "El valor de su matrícula es: $")
+                 (- 1000000 (* 1000000 0.10))
+               )
+             )
+             ((and (= carrera 3) (= estrato 1))
+               (begin
+                 (display "El valor de su matrícula es: $")
+                 (- 1300000 (* 1300000 0.20))
+               )
+             )
+             ((and (= carrera 3) (= estrato 2))
+               (begin
+                 (display "El valor de su matrícula es: $")
+                 (- 1300000 (* 1300000 0.10))
+               )
+             )
+             (else (display "Solo válido para estratos 1 y 2"))
+       )
+)
+(costo (begin
+         (display "1) Licenciatura en matemáticas")
+         (newline)
+         (display "2) Tecnología en electrónica")
+         (newline)
+         (display "3) Tecnología sistemas")
+         (newline)
+         (display "Seleccione una carrera: ")
+         (read)
+       )
+       (begin
+         (display "Inserte estrato: ")
+         (read)
+       )
+)

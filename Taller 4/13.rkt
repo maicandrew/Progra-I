@@ -1,0 +1,24 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname |13|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+(define (funcion n1 n2)
+  (cond ((and (and (>= n1 10) (<= n1 100)) (and (>= n2 50) (<= n2 1000)))
+         (+ (* 2 n1) (sqr n2))
+        )
+        ((and (or (< n1 10) (> n1 100)) (or (< n2 50) (> n2 1000))
+         )
+         (display "Ambos numeros están fuera del rango permitido")
+        )
+        ((or (< n1 10) (> n1 100)) (display "El primer numero está fuera del rango permitido"))
+        ((or (< n2 50) (> n2 1000)) (display "El segundo numero está fuera del rango permitido"))
+  )
+)
+(funcion (begin
+           (display "Insete el primer numero: ")
+           (read)
+         )
+         (begin
+           (display "Inserte el segundo numero: ")
+           (read)
+         )
+)

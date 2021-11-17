@@ -1,0 +1,8 @@
+;Hacer lo mismo que en el punto anterior, pero generando los datos aleatoriamente.
+
+(define (segundo n m)
+  (make-vector n m)
+)
+(segundo (random 10) ;Decidí poner estos números como limitantes para que
+         (random 100) ;no se extienda demasido el vector.
+)

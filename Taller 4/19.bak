@@ -1,0 +1,16 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname |Ejemplo de cond - suma_digi_pro|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+(define (suma_digi_pro n)
+  (cond ((and (<= n 99) (> n 9))
+              (/ (+ (remainder n 10) (quotient n 10)) 2))
+        ((and (<= n 999) (> n 99))
+         (/ (+ (quotient n 100) (quotient (remainder n 100) 10) (remainder (remainder n 100) 10)) 3))
+        (else (display "Solo funciona para numeros de dos o tres digitos"))
+  )
+)
+(suma_digi_pro (begin
+                 (display "Inserte un numero de dos o tres digitos: ")
+                 (read)
+               )
+)
